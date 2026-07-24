@@ -1,0 +1,134 @@
+openapi: 3.1.0
+info:
+  title: Gitar External GitLab MR Status GitLab Projects API
+  description: API for managing your Gitar installation and integrations
+  contact:
+    name: Gitar
+    url: https://gitar.ai
+    email: noreply@gitar.ai
+  license:
+    name: ''
+  version: 1.0.0
+servers:
+- url: https://api.gitar.ai/v1
+tags:
+- name: GitLab Projects
+paths:
+  /external/gitlab/projects:
+    post:
+      tags:
+      - GitLab Projects
+      summary: Onboard a GitLab project
+      description: Add a GitLab project to Gitar and configure webhooks for code review. This endpoint is idempotent — calling it for an already-connected project returns success with status `already_connected`.
+      operationId: onboardGitlabProject
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OnboardGitlabProjectApiRequest'
+        required: true
+      responses:
+        '200':
+          description: Project onboarded successfully or already connected
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OnboardGitlabProjectApiResponse'
+        '400':
+          description: Bad request (missing project_id and project_path)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '404':
+          description: GitLab integration not found for this organization
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    OnboardProjectStatus:
+      type: string
+      description: Status of an individual project onboard operation.
+      enum:
+      - onboarded
+      - already_connected
+      - failed
+    OnboardGitlabProjectApiResponse:
+      type: object
+      description: Response from onboarding a single GitLab project via the external API.
+      required:
+      - success
+      - project_path
+      - status
+      - webhook_configured
+      properties:
+        error:
+          type:
+          - string
+          - 'null'
+        project_id:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          minimum: 0
+        project_path:
+          type: string
+        status:
+          $ref: '#/components/schemas/OnboardProjectStatus'
+        success:
+          type: boolean
+        webhook_configured:
+          type: boolean
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+    OnboardGitlabProjectApiRequest:
+      type: object
+      description: 'Request to onboard a single GitLab project via the external API.
+
+
+        One of `project_id` or `project_path` must be provided.
+
+        If both are present, `project_id` takes precedence.'
+      properties:
+        project_id:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: GitLab project numeric ID (e.g. 12345)
+          minimum: 0
+        project_path:
+          type:
+          - string
+          - 'null'
+          description: GitLab project path (e.g. "group/subgroup/project")
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

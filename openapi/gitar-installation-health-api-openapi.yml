@@ -1,0 +1,142 @@
+openapi: 3.1.0
+info:
+  title: Gitar External GitLab MR Status Installation Health API
+  description: API for managing your Gitar installation and integrations
+  contact:
+    name: Gitar
+    url: https://gitar.ai
+    email: noreply@gitar.ai
+  license:
+    name: ''
+  version: 1.0.0
+servers:
+- url: https://api.gitar.ai/v1
+tags:
+- name: Installation Health
+paths:
+  /installation/health:
+    get:
+      tags:
+      - Installation Health
+      operationId: getInstallationHealth
+      responses:
+        '200':
+          description: Installation health status
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InstallationHealthResponse'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '404':
+          description: No code hosting installation found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+    InstallationHealthResponse:
+      type: object
+      required:
+      - code_hosting
+      properties:
+        code_hosting:
+          $ref: '#/components/schemas/CodeHostingHealth'
+    JiraHealth:
+      type: object
+      required:
+      - status
+      properties:
+        failure_reason:
+          type:
+          - string
+          - 'null'
+        host:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+    CodeHostingHealth:
+      type: object
+      properties:
+        github:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/GithubHealth'
+        gitlab:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/GitlabHealth'
+        jira:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/JiraHealth'
+        slack:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/SlackHealth'
+    SlackHealth:
+      type: object
+      required:
+      - status
+      - team_id
+      properties:
+        failure_reason:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+        team_id:
+          type: string
+    GithubHealth:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+    GitlabHealth:
+      type: object
+      required:
+      - status
+      properties:
+        group:
+          type:
+          - string
+          - 'null'
+        host:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

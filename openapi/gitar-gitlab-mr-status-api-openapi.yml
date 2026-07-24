@@ -1,0 +1,105 @@
+openapi: 3.1.0
+info:
+  title: Gitar External GitLab MR Status API
+  description: API for managing your Gitar installation and integrations
+  contact:
+    name: Gitar
+    url: https://gitar.ai
+    email: noreply@gitar.ai
+  license:
+    name: ''
+  version: 1.0.0
+servers:
+- url: https://api.gitar.ai/v1
+tags:
+- name: GitLab MR Status
+paths:
+  /external/gitlab/mr_status:
+    get:
+      tags:
+      - GitLab MR Status
+      summary: Get Gitar's blocking status for a GitLab MR
+      description: 'Returns the current Gitar blocking status for a GitLab merge request. Intended for use in CI pipelines: fail the job when `blocked == "yes"` and mark it required for merge.'
+      operationId: getGitlabMrStatus
+      parameters:
+      - name: project_id
+        in: query
+        description: GitLab project ID
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 0
+      - name: mr_iid
+        in: query
+        description: GitLab merge request IID
+        required: true
+        schema:
+          type: integer
+          format: int64
+          minimum: 0
+      responses:
+        '200':
+          description: MR blocking status returned successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MrStatusResponse'
+        '400':
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '403':
+          description: Insufficient scopes
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '404':
+          description: Project not connected to this org
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+    MrBlockedStatus:
+      type: string
+      enum:
+      - 'yes'
+      - 'no'
+      - pending
+    MrStatusResponse:
+      type: object
+      description: Pipeline-friendly MR status returned to SoFi's CI job.
+      required:
+      - blocked
+      properties:
+        blocked:
+          $ref: '#/components/schemas/MrBlockedStatus'
+          description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
