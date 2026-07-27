@@ -1,0 +1,497 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Gitar External API",
+    "description": "API for managing your Gitar installation and integrations",
+    "contact": {
+      "name": "Gitar",
+      "url": "https://gitar.ai",
+      "email": "noreply@gitar.ai"
+    },
+    "license": {
+      "name": ""
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.gitar.ai/v1"
+    }
+  ],
+  "paths": {
+    "/external/gitlab/mr_status": {
+      "get": {
+        "tags": [
+          "GitLab MR Status"
+        ],
+        "summary": "Get Gitar's blocking status for a GitLab MR",
+        "description": "Returns the current Gitar blocking status for a GitLab merge request. Intended for use in CI pipelines: fail the job when `blocked == \"yes\"` and mark it required for merge.",
+        "operationId": "getGitlabMrStatus",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "description": "GitLab project ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "mr_iid",
+            "in": "query",
+            "description": "GitLab merge request IID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MR blocking status returned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MrStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not connected to this org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/external/gitlab/projects": {
+      "post": {
+        "tags": [
+          "GitLab Projects"
+        ],
+        "summary": "Onboard a GitLab project",
+        "description": "Add a GitLab project to Gitar and configure webhooks for code review. This endpoint is idempotent — calling it for an already-connected project returns success with status `already_connected`.",
+        "operationId": "onboardGitlabProject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardGitlabProjectApiRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project onboarded successfully or already connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardGitlabProjectApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (missing project_id and project_path)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "GitLab integration not found for this organization",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/installation/health": {
+      "get": {
+        "tags": [
+          "Installation Health"
+        ],
+        "operationId": "getInstallationHealth",
+        "responses": {
+          "200": {
+            "description": "Installation health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstallationHealthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No code hosting installation found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CodeHostingHealth": {
+        "type": "object",
+        "properties": {
+          "github": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GithubHealth"
+              }
+            ]
+          },
+          "gitlab": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GitlabHealth"
+              }
+            ]
+          },
+          "jira": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/JiraHealth"
+              }
+            ]
+          },
+          "slack": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/SlackHealth"
+              }
+            ]
+          }
+        }
+      },
+      "GithubHealth": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "GitlabHealth": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "group": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "host": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "InstallationHealthResponse": {
+        "type": "object",
+        "required": [
+          "code_hosting"
+        ],
+        "properties": {
+          "code_hosting": {
+            "$ref": "#/components/schemas/CodeHostingHealth"
+          }
+        }
+      },
+      "JiraHealth": {
+        "type": "object",
+        "required": [
+          "status"
+        ],
+        "properties": {
+          "failure_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "host": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "MrBlockedStatus": {
+        "type": "string",
+        "enum": [
+          "yes",
+          "no",
+          "pending"
+        ]
+      },
+      "MrStatusResponse": {
+        "type": "object",
+        "description": "Pipeline-friendly MR status returned to SoFi's CI job.",
+        "required": [
+          "blocked"
+        ],
+        "properties": {
+          "blocked": {
+            "$ref": "#/components/schemas/MrBlockedStatus",
+            "description": "`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass."
+          }
+        }
+      },
+      "OnboardGitlabProjectApiRequest": {
+        "type": "object",
+        "description": "Request to onboard a single GitLab project via the external API.\n\nOne of `project_id` or `project_path` must be provided.\nIf both are present, `project_id` takes precedence.",
+        "properties": {
+          "project_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "description": "GitLab project numeric ID (e.g. 12345)",
+            "minimum": 0
+          },
+          "project_path": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "GitLab project path (e.g. \"group/subgroup/project\")"
+          }
+        }
+      },
+      "OnboardGitlabProjectApiResponse": {
+        "type": "object",
+        "description": "Response from onboarding a single GitLab project via the external API.",
+        "required": [
+          "success",
+          "project_path",
+          "status",
+          "webhook_configured"
+        ],
+        "properties": {
+          "error": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "project_id": {
+            "type": [
+              "integer",
+              "null"
+            ],
+            "format": "int64",
+            "minimum": 0
+          },
+          "project_path": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OnboardProjectStatus"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "webhook_configured": {
+            "type": "boolean"
+          }
+        }
+      },
+      "OnboardProjectStatus": {
+        "type": "string",
+        "description": "Status of an individual project onboard operation.",
+        "enum": [
+          "onboarded",
+          "already_connected",
+          "failed"
+        ]
+      },
+      "ResponseFailure": {
+        "type": "object",
+        "required": [
+          "message"
+        ],
+        "properties": {
+          "error_code": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "SlackHealth": {
+        "type": "object",
+        "required": [
+          "status",
+          "team_id"
+        ],
+        "properties": {
+          "failure_reason": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "status": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

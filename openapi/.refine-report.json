@@ -1,0 +1,18 @@
+{
+  "provider": "gitar",
+  "sources": [
+    "gitar-gitlab-mr-status-api-openapi.yml",
+    "gitar-gitlab-projects-api-openapi.yml",
+    "gitar-installation-health-api-openapi.yml"
+  ],
+  "outputs": [
+    "gitar-gitlab-mr-status-api-openapi.yml",
+    "gitar-gitlab-projects-api-openapi.yml",
+    "gitar-installation-health-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

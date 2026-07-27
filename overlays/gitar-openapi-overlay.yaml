@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Gitar External API
+  version: 1.0.0
+extends: openapi/gitar-openapi-original.json
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-19'
+    x-apievangelist-provider: gitar
+    x-apievangelist-notes: >-
+      Gitar External API — Bearer-token REST API (api.gitar.ai/v1) for programmatic
+      installation health checks and GitLab project onboarding/MR status. API access
+      is gated to the Enterprise plan.
+- target: $.info
+  update:
+    x-error-envelope:
+      schema: ResponseFailure
+      fields: [error_code, message]
+      rfc9457: false
+- target: $.info
+  update:
+    x-rate-limit-signal: '429 Too Many Requests, limited per organization'

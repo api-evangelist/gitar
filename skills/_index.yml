@@ -1,0 +1,12 @@
+generated: '2026-07-19'
+method: generated
+source: openapi/gitar-openapi-original.json
+skills:
+- file: gitar-onboard-gitlab-project.md
+  name: Onboard a GitLab project to Gitar and verify its status
+  api: openapi/gitar-openapi-original.json
+  operations: [onboardGitlabProject, getGitlabMrStatus, getInstallationHealth]
+- file: gitar-check-installation-health.md
+  name: Check Gitar installation health
+  api: openapi/gitar-openapi-original.json
+  operations: [getInstallationHealth]

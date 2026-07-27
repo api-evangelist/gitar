@@ -1,0 +1,18 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/gitar-openapi-original.json
+versioning:
+  scheme: uri-path
+  current: v1
+  base_url: https://api.gitar.ai/v1
+  spec_version: 1.0.0
+status_page: https://status.gitar.ai
+trust_center: https://trust.gitar.ai/
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+deprecated_operations: []
+notes: >-
+  Gitar operates a public status page at status.gitar.ai. The External API is at v1
+  (uri-path versioned). No public formal deprecation/sunset policy was found in the
+  docs during this pass; API tokens carry a configurable expiration (default 30 days).

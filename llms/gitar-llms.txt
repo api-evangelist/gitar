@@ -1,0 +1,96 @@
+# Gitar Documentation
+
+> AI code review that fixes your code automatically — not just comments on it.
+
+## Overview
+
+Gitar is an AI-powered code review tool that:
+- Automatically fixes broken builds, failing tests, and code review feedback
+- Validates all fixes against your CI pipeline before pushing
+- Works directly in your PR interface (GitHub, GitLab)
+- Requires zero configuration to get started
+
+## Quick Links
+
+- Homepage: https://gitar.ai
+- Dashboard: https://app.gitar.ai
+- Documentation: https://docs.gitar.ai
+
+## Documentation Structure
+
+### Get Started
+- /introduction - Overview and quick start guide
+- /quickstart - Get up and running in under 5 minutes
+- /how-gitar-works - How Gitar works with your PRs
+
+### Features
+- /features/code-review - AI-powered code review capabilities
+- /features/ci-analysis-and-fixes - Automatic CI failure analysis and fixes
+- /features/dashboard-commands - Dashboard commands and controls
+- /features/insights - Insights dashboard for tracking activity and metrics
+- /rules - Create automated workflows with natural language
+
+### Connect Repositories
+- /connecting-code/github - GitHub connection
+- /connecting-code/gitlab - GitLab connection
+
+### Connect CI
+- /connecting-ci/buildkite - Buildkite CI integration
+- /connecting-ci/circleci - CircleCI integration
+- /connecting-ci/bitrise - Bitrise integration
+
+### Configuration
+- /configuration/settings - Organization settings
+- /configuration/repository-config - Repository configuration
+- /configuration/signed-commits - Verify commits signed by Gitar's GPG key
+
+### Administration
+- /administration/members - Members and seat management
+- /administration/sso - SSO configuration
+
+### Integrations
+- /integrations/slack - Slack integration setup
+- /integrations/jira - Jira integration setup
+- /integrations/linear - Linear integration setup
+
+### Account & Billing
+- /account-billing/plans - Plans, seats, and usage limits
+- /account-billing/managing-subscription - Managing your subscription
+
+### API Reference
+- /api-reference/overview - API overview and authentication
+- /api-reference/installation/get-installation-health - Check GitLab installation health
+
+### Enterprise
+- /administration/security - Security overview
+- /administration/audit-logs - Audit logs
+
+### Resources
+- /resources/faq - Frequently asked questions
+- /resources/changelog - Release notes and changelog
+
+## Key Concepts
+
+### CI Analysis & Fixes
+Gitar automatically detects failing builds and tests, analyzes root cause, and pushes fixes to your PR. Supports build errors, test failures, linting errors, and flaky tests. Also fixes code review findings and user-requested changes. Controls include auto-apply on/off and manual comment instructions.
+
+### Repository Rules
+Natural language rules in .gitar/rules/ that define automated workflows. Examples:
+- "When CI fails, analyze and fix the issue"
+- "Add tests for any new functions"
+- "Ensure all PRs have documentation updates"
+
+### Code Review
+AI-powered review that catches security issues, bugs, performance problems, and code quality issues before merge. Configurable merge blocking, inline comments, and custom review instructions.
+
+### Insights
+Dashboard for tracking code review activity, CI failure patterns, and repository rules performance. Includes overview metrics, code review findings breakdown, rules statistics, and reviews tab.
+
+### Integrations
+Connect Jira, Linear, and Slack to automate issue tracking, notifications, and workflow actions through repository rules.
+
+## Contact
+
+- Support: developers@gitar.ai
+- Discord: https://go.gitar.ai/community
+- GitHub: https://github.com/gitarcode

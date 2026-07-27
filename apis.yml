@@ -1,22 +1,86 @@
 aid: gitar
 name: Gitar
-description: 'Gitar is a company surfaced as a portfolio company of sierra-ventures and added to the API
-  Evangelist network as a stub for enrichment. Sector: developer-tools. This profile is a lead awaiting
-  the enrichment pipeline.'
+description: >-
+  Gitar is an AI code review platform that goes beyond commenting on pull and merge
+  requests — it automatically fixes broken builds, failing tests, linting errors, and
+  code-review findings, and validates every change against your CI pipeline before it
+  is pushed. It works directly in the GitHub and GitLab PR interface, analyzes CI
+  failures, deduplicates flaky tests, and runs natural-language repository rules from
+  a .gitar/rules directory. Built by engineers from Uber's development stack and
+  acquired by Sonar (SonarQube), Gitar is used by teams including SoFi, DeepL, and
+  Altruist. It exposes a Bearer-token External API (api.gitar.ai/v1) on the Enterprise
+  plan for installation health checks and GitLab project onboarding, and integrates
+  with Buildkite, CircleCI, Bitrise, Jira, Linear, and Slack.
 url: https://raw.githubusercontent.com/api-evangelist/gitar/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - sierra-ventures
-x-tier: stub
+x-tier: profiled
 x-tier-reason: portfolio-lead
+x-acquired-by: sonar
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-19'
+image: https://gitar.ai/assets/meta-banner.png
 tags:
 - Company
 - Developer Tools
-apis: []
+- Code Review
+- CI/CD
+- Code Quality
+- AI
+- Developer Productivity
+- Automation
+apis:
+- aid: gitar:gitar-gitlab-mr-status-api
+  name: Gitar GitLab MR Status API
+  description: The GitLab MR Status API from Gitar — 1 operation(s) for gitlab mr status.
+  humanURL: https://docs.gitar.ai/api-reference/overview
+  baseURL: https://api.gitar.ai/v1
+  tags:
+  - GitLab MR Status
+  properties:
+  - type: OpenAPI
+    url: openapi/gitar-gitlab-mr-status-api-openapi.yml
+  - type: APIReference
+    url: https://docs.gitar.ai/api-reference/overview
+- aid: gitar:gitar-gitlab-projects-api
+  name: Gitar GitLab Projects API
+  description: The GitLab Projects API from Gitar — 1 operation(s) for gitlab projects.
+  humanURL: https://docs.gitar.ai/api-reference/overview
+  baseURL: https://api.gitar.ai/v1
+  tags:
+  - GitLab Projects
+  properties:
+  - type: OpenAPI
+    url: openapi/gitar-gitlab-projects-api-openapi.yml
+  - type: APIReference
+    url: https://docs.gitar.ai/api-reference/overview
+- aid: gitar:gitar-installation-health-api
+  name: Gitar Installation Health API
+  description: The Installation Health API from Gitar — 1 operation(s) for installation health.
+  humanURL: https://docs.gitar.ai/api-reference/overview
+  baseURL: https://api.gitar.ai/v1
+  tags:
+  - Installation Health
+  properties:
+  - type: OpenAPI
+    url: openapi/gitar-installation-health-api-openapi.yml
+  - type: APIReference
+    url: https://docs.gitar.ai/api-reference/overview
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -25,3 +89,64 @@ maintainers:
 common:
 - type: Website
   url: https://gitar.ai/
+- type: DeveloperPortal
+  url: https://docs.gitar.ai/
+- type: Documentation
+  url: https://docs.gitar.ai/
+- type: APIReference
+  url: https://docs.gitar.ai/api-reference/overview
+- type: GettingStarted
+  url: https://docs.gitar.ai/quickstart
+- type: Blog
+  url: https://gitar.ai/blog
+- type: Pricing
+  url: https://gitar.ai/pricing
+- type: SignUp
+  url: https://app.gitar.ai/sign-up
+- type: Login
+  url: https://app.gitar.ai/sign-in
+- type: Support
+  url: https://go.gitar.ai/community
+- type: GitHubOrganization
+  url: https://github.com/gitarcode
+- type: TermsOfService
+  url: https://gitar.ai/terms-of-service
+- type: PrivacyPolicy
+  url: https://gitar.ai/privacy-policy
+- type: StatusPage
+  url: https://status.gitar.ai
+- type: TrustCenter
+  url: https://trust.gitar.ai/
+- type: Compliance
+  url: security/gitar-trust-center.yml
+- type: OpenAPI
+  url: openapi/gitar-openapi-original.json
+- type: LLMsTxt
+  url: llms/gitar-llms.txt
+- type: MCPServer
+  url: mcp/gitar-mcp.yml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Overlay
+  url: overlays/gitar-openapi-overlay.yaml
+- type: Authentication
+  url: authentication/gitar-authentication.yml
+- type: Conventions
+  url: conventions/gitar-conventions.yml
+- type: ErrorCatalog
+  url: errors/gitar-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/gitar-lifecycle.yml
+- type: Conformance
+  url: conformance/gitar-conformance.yml
+- type: DataModel
+  url: data-model/gitar-data-model.yml
+- type: AgenticAccess
+  url: agentic-access/gitar-agentic-access.yml
+- type: DomainSecurity
+  url: security/gitar-domain-security.yml
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

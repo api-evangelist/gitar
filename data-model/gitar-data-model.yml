@@ -1,0 +1,49 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/gitar-openapi-original.json
+entities:
+- name: InstallationHealthResponse
+  description: Roll-up of Gitar installation health across connected code-hosting/integration platforms.
+  fields: [code_hosting]
+- name: CodeHostingHealth
+  description: Per-platform health container.
+  fields: [github, gitlab, jira, slack]
+- name: GithubHealth
+  fields: [status]
+- name: GitlabHealth
+  fields: [group, host, status]
+- name: JiraHealth
+  fields: [failure_reason, host, status]
+- name: SlackHealth
+  fields: [failure_reason, status, team_id]
+- name: MrStatusResponse
+  description: Gitar's blocking status for a GitLab merge request.
+  fields: [blocked]
+- name: OnboardGitlabProjectApiRequest
+  fields: [project_id, project_path]
+- name: OnboardGitlabProjectApiResponse
+  fields: [error, project_id, project_path, status, success, webhook_configured]
+- name: ResponseFailure
+  description: Error envelope.
+  fields: [error_code, message]
+relationships:
+- from: InstallationHealthResponse
+  to: CodeHostingHealth
+  type: has_one
+  via: code_hosting
+- from: CodeHostingHealth
+  to: GithubHealth
+  type: has_one
+  via: github
+- from: CodeHostingHealth
+  to: GitlabHealth
+  type: has_one
+  via: gitlab
+- from: CodeHostingHealth
+  to: JiraHealth
+  type: has_one
+  via: jira
+- from: CodeHostingHealth
+  to: SlackHealth
+  type: has_one
+  via: slack

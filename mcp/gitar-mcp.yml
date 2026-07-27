@@ -1,0 +1,24 @@
+generated: '2026-07-19'
+method: derived
+status: candidate
+source: openapi/gitar-openapi-original.json
+notes: >-
+  No official hosted/remote Gitar MCP server was found on the docs, the gitarcode
+  GitHub org, or the MCP registries as of this pass. This is a candidate tool list
+  derived one-tool-per-operation from the Gitar External API OpenAPI. API access is
+  an Enterprise-plan capability; tokens are Bearer tokens created in org settings.
+server:
+  name: gitar
+  transport: http
+  auth: bearer
+  base_url: https://api.gitar.ai/v1
+tools:
+- name: get_gitlab_mr_status
+  description: Get Gitar's blocking (merge) status for a GitLab merge request.
+  source_operation: openapi/gitar-openapi-original.json#getGitlabMrStatus
+- name: onboard_gitlab_project
+  description: Onboard (connect) a GitLab project to the Gitar organization.
+  source_operation: openapi/gitar-openapi-original.json#onboardGitlabProject
+- name: get_installation_health
+  description: Check Gitar installation health across connected code-hosting platforms.
+  source_operation: openapi/gitar-openapi-original.json#getInstallationHealth

@@ -1,0 +1,48 @@
+generated: '2026-07-19'
+method: derived
+source: openapi/gitar-openapi-original.json
+format: custom
+envelope:
+  schema: ResponseFailure
+  required: [message]
+  fields:
+    message: Human-readable error message (always present)
+    error_code: Machine-readable error code (nullable)
+  rfc9457: false
+notes: >-
+  Derived from the OpenAPI 4xx responses. Errors are returned as a JSON body with a
+  required `message` and an optional nullable `error_code`. Rate limiting returns 429.
+problems:
+- status: 400
+  title: Bad request / invalid query parameters
+  meaning: Malformed request (e.g. missing project_id and project_path on onboard).
+  source_operations:
+  - openapi/gitar-openapi-original.json#getGitlabMrStatus
+  - openapi/gitar-openapi-original.json#onboardGitlabProject
+- status: 401
+  title: Unauthorized
+  meaning: Missing or invalid Bearer token.
+  source_operations:
+  - openapi/gitar-openapi-original.json#getGitlabMrStatus
+  - openapi/gitar-openapi-original.json#onboardGitlabProject
+  - openapi/gitar-openapi-original.json#getInstallationHealth
+- status: 403
+  title: Insufficient scopes
+  meaning: The API token lacks the scopes required for the operation.
+  source_operations:
+  - openapi/gitar-openapi-original.json#getGitlabMrStatus
+  - openapi/gitar-openapi-original.json#onboardGitlabProject
+  - openapi/gitar-openapi-original.json#getInstallationHealth
+- status: 404
+  title: Not found
+  meaning: >-
+    Resource not found — project not connected to this org, GitLab integration not
+    found, or no code-hosting installation found.
+  source_operations:
+  - openapi/gitar-openapi-original.json#getGitlabMrStatus
+  - openapi/gitar-openapi-original.json#onboardGitlabProject
+  - openapi/gitar-openapi-original.json#getInstallationHealth
+- status: 429
+  title: Too Many Requests
+  meaning: API requests are rate limited per organization; retry after backing off.
+  source: https://docs.gitar.ai/api-reference/overview

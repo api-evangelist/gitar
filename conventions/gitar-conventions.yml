@@ -1,0 +1,31 @@
+generated: '2026-07-19'
+method: searched
+source: openapi/gitar-openapi-original.json
+docs: https://docs.gitar.ai/api-reference/overview
+authentication:
+  style: bearer-token
+  header: 'Authorization: Bearer <token>'
+  token_creation: app.gitar.ai org settings -> API -> Create API Token (alias + expiration, default 30 days)
+  scopes: token-scoped (a 403 "Insufficient scopes" is returned when the token lacks required scopes)
+  cross_ref: authentication/gitar-authentication.yml
+versioning:
+  style: uri-path
+  current: v1
+  cross_ref: lifecycle/gitar-lifecycle.yml
+rate_limiting:
+  signaled: true
+  scope: per-organization
+  status_code: 429
+  response: '429 Too Many Requests'
+error_envelope:
+  schema: ResponseFailure
+  fields: [error_code, message]
+  rfc9457: false
+  cross_ref: errors/gitar-problem-types.yml
+idempotency:
+  supported: unknown
+  notes: No idempotency-key header or documented idempotency contract was found in the docs or OpenAPI during this pass.
+pagination:
+  supported: unknown
+  notes: No pagination parameters documented on the current (small) External API surface.
+media_type: application/json
