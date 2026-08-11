@@ -120,7 +120,7 @@ common:
 - type: Compliance
   url: security/gitar-trust-center.yml
 - type: OpenAPI
-  url: openapi/gitar-openapi-original.json
+  url: openapi/_original/gitar-openapi-original.json
 - type: LLMsTxt
   url: llms/gitar-llms.txt
 - type: MCPServer
