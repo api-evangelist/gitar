@@ -2,11 +2,10 @@ generated: '2026-07-19'
 method: derived
 status: candidate
 source: openapi/gitar-openapi-original.json
-notes: >-
-  No official hosted/remote Gitar MCP server was found on the docs, the gitarcode
-  GitHub org, or the MCP registries as of this pass. This is a candidate tool list
-  derived one-tool-per-operation from the Gitar External API OpenAPI. API access is
-  an Enterprise-plan capability; tokens are Bearer tokens created in org settings.
+notes: No official hosted/remote Gitar MCP server was found on the docs, the gitarcode GitHub org, or
+  the MCP registries as of this pass. This is a candidate tool list derived one-tool-per-operation from
+  the Gitar External API OpenAPI. API access is an Enterprise-plan capability; tokens are Bearer tokens
+  created in org settings.
 server:
   name: gitar
   transport: http
@@ -22,3 +21,9 @@ tools:
 - name: get_installation_health
   description: Check Gitar installation health across connected code-hosting platforms.
   source_operation: openapi/gitar-openapi-original.json#getInstallationHealth
+deployment:
+  mode: none
+  verified: derived
+  tools: 3
+  checked: '2026-08-12'
+  source: catalog MCP census

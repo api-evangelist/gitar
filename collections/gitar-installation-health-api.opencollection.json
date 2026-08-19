@@ -1,0 +1,32 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gitar External GitLab MR Status Installation Health API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Installation Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "getInstallationHealth",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gitar.ai/v1/installation/health",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,47 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gitar External GitLab MR Status API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "GitLab MR Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Gitar's blocking status for a GitLab MR",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.gitar.ai/v1/external/gitlab/mr_status",
+            "params": [
+              {
+                "name": "project_id",
+                "value": "",
+                "type": "query",
+                "description": "GitLab project ID"
+              },
+              {
+                "name": "mr_iid",
+                "value": "",
+                "type": "query",
+                "description": "GitLab merge request IID"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the current Gitar blocking status for a GitLab merge request. Intended for use in CI pipelines: fail the job when `blocked == \"yes\"` and mark it required for merge."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

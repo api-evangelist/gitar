@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Gitar External GitLab MR Status GitLab Projects API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "GitLab Projects",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Onboard a GitLab project",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.gitar.ai/v1/external/gitlab/projects",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Add a GitLab project to Gitar and configure webhooks for code review. This endpoint is idempotent — calling it for an already-connected project returns success with status `already_connected`."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
