@@ -1,9 +1,7 @@
 {
   "provider": "gitar",
   "sources": [
-    "gitar-gitlab-mr-status-api-openapi.yml",
-    "gitar-gitlab-projects-api-openapi.yml",
-    "gitar-installation-health-api-openapi.yml"
+    "_original/gitar-openapi-original.json"
   ],
   "outputs": [
     "gitar-gitlab-mr-status-api-openapi.yml",
@@ -13,6 +11,17 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "gitar-openapi-original.json: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "gitar-openapi-original.json: declared missing tag: GitLab MR Status",
+    "gitar-openapi-original.json: declared missing tag: GitLab Projects",
+    "gitar-openapi-original.json: declared missing tag: Installation Health",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "gitar-gitlab-mr-status-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gitar-gitlab-projects-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "gitar-installation-health-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Gitar External GitLab MR Status GitLab Projects API
+  title: Gitar External GitLab Projects API
   description: API for managing your Gitar installation and integrations
   contact:
     name: Gitar
@@ -69,6 +69,17 @@ components:
       - onboarded
       - already_connected
       - failed
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
     OnboardGitlabProjectApiResponse:
       type: object
       description: Response from onboarding a single GitLab project via the external API.
@@ -96,17 +107,6 @@ components:
           type: boolean
         webhook_configured:
           type: boolean
-    ResponseFailure:
-      type: object
-      required:
-      - message
-      properties:
-        error_code:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
     OnboardGitlabProjectApiRequest:
       type: object
       description: 'Request to onboard a single GitLab project via the external API.

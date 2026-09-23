@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: Gitar External GitLab MR Status Installation Health API
+  title: Gitar External Installation Health API
   description: API for managing your Gitar installation and integrations
   contact:
     name: Gitar
@@ -46,32 +46,16 @@ paths:
                 $ref: '#/components/schemas/ResponseFailure'
       security:
       - bearerAuth: []
+      summary: Get installation health
+      x-summary-source: derived
 components:
   schemas:
-    ResponseFailure:
-      type: object
-      required:
-      - message
-      properties:
-        error_code:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-    InstallationHealthResponse:
-      type: object
-      required:
-      - code_hosting
-      properties:
-        code_hosting:
-          $ref: '#/components/schemas/CodeHostingHealth'
-    JiraHealth:
+    GitlabHealth:
       type: object
       required:
       - status
       properties:
-        failure_reason:
+        group:
           type:
           - string
           - 'null'
@@ -80,6 +64,27 @@ components:
           - string
           - 'null'
         status:
+          type: string
+    InstallationHealthResponse:
+      type: object
+      required:
+      - code_hosting
+      properties:
+        code_hosting:
+          $ref: '#/components/schemas/CodeHostingHealth'
+    SlackHealth:
+      type: object
+      required:
+      - status
+      - team_id
+      properties:
+        failure_reason:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
+        team_id:
           type: string
     CodeHostingHealth:
       type: object
@@ -100,33 +105,12 @@ components:
           oneOf:
           - type: 'null'
           - $ref: '#/components/schemas/SlackHealth'
-    SlackHealth:
+    JiraHealth:
       type: object
       required:
       - status
-      - team_id
       properties:
         failure_reason:
-          type:
-          - string
-          - 'null'
-        status:
-          type: string
-        team_id:
-          type: string
-    GithubHealth:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
-    GitlabHealth:
-      type: object
-      required:
-      - status
-      properties:
-        group:
           type:
           - string
           - 'null'
@@ -135,6 +119,24 @@ components:
           - string
           - 'null'
         status:
+          type: string
+    GithubHealth:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
           type: string
   securitySchemes:
     bearerAuth:
