@@ -73,6 +73,12 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    MrBlockedStatus:
+      type: string
+      enum:
+      - 'yes'
+      - 'no'
+      - pending
     ResponseFailure:
       type: object
       required:
@@ -93,12 +99,6 @@ components:
         blocked:
           $ref: '#/components/schemas/MrBlockedStatus'
           description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
-    MrBlockedStatus:
-      type: string
-      enum:
-      - 'yes'
-      - 'no'
-      - pending
   securitySchemes:
     bearerAuth:
       type: http

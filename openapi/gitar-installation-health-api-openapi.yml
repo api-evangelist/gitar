@@ -50,6 +50,21 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    JiraHealth:
+      type: object
+      required:
+      - status
+      properties:
+        failure_reason:
+          type:
+          - string
+          - 'null'
+        host:
+          type:
+          - string
+          - 'null'
+        status:
+          type: string
     GitlabHealth:
       type: object
       required:
@@ -72,6 +87,13 @@ components:
       properties:
         code_hosting:
           $ref: '#/components/schemas/CodeHostingHealth'
+    GithubHealth:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
     SlackHealth:
       type: object
       required:
@@ -105,28 +127,6 @@ components:
           oneOf:
           - type: 'null'
           - $ref: '#/components/schemas/SlackHealth'
-    JiraHealth:
-      type: object
-      required:
-      - status
-      properties:
-        failure_reason:
-          type:
-          - string
-          - 'null'
-        host:
-          type:
-          - string
-          - 'null'
-        status:
-          type: string
-    GithubHealth:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
     ResponseFailure:
       type: object
       required:
