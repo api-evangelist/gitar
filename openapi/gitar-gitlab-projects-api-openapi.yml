@@ -62,6 +62,38 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    OnboardGitlabProjectApiRequest:
+      type: object
+      description: 'Request to onboard a single GitLab project via the external API.
+
+
+        One of `project_id` or `project_path` must be provided.
+
+        If both are present, `project_id` takes precedence.'
+      properties:
+        project_id:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: GitLab project numeric ID (e.g. 12345)
+          minimum: 0
+        project_path:
+          type:
+          - string
+          - 'null'
+          description: GitLab project path (e.g. "group/subgroup/project")
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
     OnboardGitlabProjectApiResponse:
       type: object
       description: Response from onboarding a single GitLab project via the external API.
@@ -89,17 +121,6 @@ components:
           type: boolean
         webhook_configured:
           type: boolean
-    ResponseFailure:
-      type: object
-      required:
-      - message
-      properties:
-        error_code:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
     OnboardProjectStatus:
       type: string
       description: Status of an individual project onboard operation.
@@ -107,27 +128,6 @@ components:
       - onboarded
       - already_connected
       - failed
-    OnboardGitlabProjectApiRequest:
-      type: object
-      description: 'Request to onboard a single GitLab project via the external API.
-
-
-        One of `project_id` or `project_path` must be provided.
-
-        If both are present, `project_id` takes precedence.'
-      properties:
-        project_id:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: GitLab project numeric ID (e.g. 12345)
-          minimum: 0
-        project_path:
-          type:
-          - string
-          - 'null'
-          description: GitLab project path (e.g. "group/subgroup/project")
   securitySchemes:
     bearerAuth:
       type: http
