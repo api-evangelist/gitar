@@ -84,6 +84,12 @@ components:
           - 'null'
         message:
           type: string
+    MrBlockedStatus:
+      type: string
+      enum:
+      - 'yes'
+      - 'no'
+      - pending
     MrStatusResponse:
       type: object
       description: Pipeline-friendly MR status returned to SoFi's CI job.
@@ -93,12 +99,6 @@ components:
         blocked:
           $ref: '#/components/schemas/MrBlockedStatus'
           description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
-    MrBlockedStatus:
-      type: string
-      enum:
-      - 'yes'
-      - 'no'
-      - pending
   securitySchemes:
     bearerAuth:
       type: http

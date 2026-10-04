@@ -79,13 +79,17 @@ components:
           type: string
         team_id:
           type: string
-    InstallationHealthResponse:
+    ResponseFailure:
       type: object
       required:
-      - code_hosting
+      - message
       properties:
-        code_hosting:
-          $ref: '#/components/schemas/CodeHostingHealth'
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
     JiraHealth:
       type: object
       required:
@@ -100,17 +104,6 @@ components:
           - string
           - 'null'
         status:
-          type: string
-    ResponseFailure:
-      type: object
-      required:
-      - message
-      properties:
-        error_code:
-          type:
-          - string
-          - 'null'
-        message:
           type: string
     CodeHostingHealth:
       type: object
@@ -131,6 +124,13 @@ components:
           oneOf:
           - type: 'null'
           - $ref: '#/components/schemas/SlackHealth'
+    InstallationHealthResponse:
+      type: object
+      required:
+      - code_hosting
+      properties:
+        code_hosting:
+          $ref: '#/components/schemas/CodeHostingHealth'
     GithubHealth:
       type: object
       required:

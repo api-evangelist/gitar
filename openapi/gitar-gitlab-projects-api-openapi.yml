@@ -62,6 +62,17 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
     OnboardGitlabProjectApiRequest:
       type: object
       description: 'Request to onboard a single GitLab project via the external API.
@@ -83,17 +94,13 @@ components:
           - string
           - 'null'
           description: GitLab project path (e.g. "group/subgroup/project")
-    ResponseFailure:
-      type: object
-      required:
-      - message
-      properties:
-        error_code:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
+    OnboardProjectStatus:
+      type: string
+      description: Status of an individual project onboard operation.
+      enum:
+      - onboarded
+      - already_connected
+      - failed
     OnboardGitlabProjectApiResponse:
       type: object
       description: Response from onboarding a single GitLab project via the external API.
@@ -121,13 +128,6 @@ components:
           type: boolean
         webhook_configured:
           type: boolean
-    OnboardProjectStatus:
-      type: string
-      description: Status of an individual project onboard operation.
-      enum:
-      - onboarded
-      - already_connected
-      - failed
   securitySchemes:
     bearerAuth:
       type: http
