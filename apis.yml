@@ -48,6 +48,10 @@ specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-07-19'
 image: https://gitar.ai/assets/meta-banner.png
+x-docs-platform: mintlify
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-10-03
+x-docs-hosting: vercel
 tags:
 - Company
 - Developer Tools
@@ -109,6 +113,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/gitar-capability-edges.yml
+  name: Gitar Business Capability Map
 - type: Website
   url: https://gitar.ai/
 - type: DeveloperPortal
