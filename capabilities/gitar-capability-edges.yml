@@ -1,0 +1,26 @@
+slug: gitar
+provider: Gitar
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Software & Technology
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 1
+edges:
+- tag: GitLab MR Status
+  spec_file: gitar-gitlab-mr-status-api-openapi.yml
+  capability_id: BC-4200.40
+  capability_id_l1: BC-4200
+  capability_name: Software Construction Management
+  confidence: 0.7
+  evidence: GET /external/gitlab/mr_status  getGitlabMrStatus  Get Gitar's blocking status for a GitLab
+    MR; schema MrBlockedStatus
+  reason: The operation reports whether Gitar blocks a merge request, i.e. the code-review gate on a proposed
+    source change, which sits in Software Construction Management (source control and code review practice).
+    Moderate confidence because a single read-only status endpoint could also be read as CI pipeline gating.
