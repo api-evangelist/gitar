@@ -1,0 +1,64 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://www.sonarsource.com/plans-and-pricing/gitar/
+sources:
+- https://www.sonarsource.com/plans-and-pricing/gitar/
+- https://gitar.ai/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: per-seat
+delivery:
+  delivery: managed+licensed
+  method: page
+  read: '2026-10-07'
+  evidence: Custom deployment options
+  managed_tier: Core
+published: true
+note: Per-user plans with annual/monthly pricing; Enterprise is custom-quoted. Free tier for OSI-licensed
+  open source projects (no specific license required beyond OSI-approved).
+plan_count: 6
+currency: USD
+plans:
+- name: Core (annual)
+  price_text: $20 / user / mo
+  price: 20
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Unlimited public & private repos · Up to 50 users; Billed annually · 14-day free trial
+- name: Core (monthly)
+  price_text: $25 / user / mo
+  price: 25
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Billed monthly · 14-day free trial
+- name: Pro (annual)
+  price_text: $40 / user / mo
+  price: 40
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Everything in Core, plus auto-approve & merge blocking, autonomous fix loop; Up to 50
+    users
+- name: Pro (monthly)
+  price_text: $50 / user / mo
+  price: 50
+  currency: USD
+  period: month
+  unit: user
+  included_quota: Billed monthly · 14-day free trial
+- name: Enterprise
+  price_text: Contact us
+  period: none
+  included_quota: Everything in Pro, plus self-hosted code hosting, BYO LLM API key, SSO/SAML, API access;
+    unlimited users
+- name: Free for Open Source
+  price_text: Open source projects get Gitar at no cost.
+  period: none
+  included_quota: All the same features as the Pro plan; public repo on GitHub or GitLab, OSI-approved
+    license
