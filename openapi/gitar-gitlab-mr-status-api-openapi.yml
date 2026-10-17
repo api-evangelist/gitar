@@ -73,6 +73,21 @@ paths:
       - bearerAuth: []
 components:
   schemas:
+    MrStatusResponse:
+      type: object
+      description: Pipeline-friendly MR status returned to SoFi's CI job.
+      required:
+      - blocked
+      properties:
+        blocked:
+          $ref: '#/components/schemas/MrBlockedStatus'
+          description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
+    MrBlockedStatus:
+      type: string
+      enum:
+      - 'yes'
+      - 'no'
+      - pending
     ResponseFailure:
       type: object
       required:
@@ -84,21 +99,6 @@ components:
           - 'null'
         message:
           type: string
-    MrBlockedStatus:
-      type: string
-      enum:
-      - 'yes'
-      - 'no'
-      - pending
-    MrStatusResponse:
-      type: object
-      description: Pipeline-friendly MR status returned to SoFi's CI job.
-      required:
-      - blocked
-      properties:
-        blocked:
-          $ref: '#/components/schemas/MrBlockedStatus'
-          description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
   securitySchemes:
     bearerAuth:
       type: http
