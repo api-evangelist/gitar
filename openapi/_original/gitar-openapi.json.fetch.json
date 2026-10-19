@@ -1,0 +1,12 @@
+{
+ "url": "https://docs.gitar.ai/openapi.json",
+ "final": "https://docs.gitar.ai/openapi.json",
+ "status": 200,
+ "content_type": "application/json",
+ "bytes": 20925,
+ "sha256": "d0969c409b44989572c5b12872c87f78e40dbdf33e7dd673981e60c6b5816b6d",
+ "fetched_at": "2026-10-19",
+ "fetched_by": "APIEvangelist-Harvest/1.0 (+https://apievangelist.com)",
+ "match": "byte-identical",
+ "note": "re-archived: the provider's current document replaced a stale archive (roadmap#793); the old files are in openapi/_superseded/2026-10-19-stale"
+}

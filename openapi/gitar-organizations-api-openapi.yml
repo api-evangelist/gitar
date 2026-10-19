@@ -1,0 +1,122 @@
+openapi: 3.2.0
+info:
+  title: Gitar External Organizations API
+  description: API for managing your Gitar installation and integrations
+  contact:
+    name: Gitar
+    url: https://gitar.ai
+    email: noreply@gitar.ai
+  license:
+    name: ''
+  version: 1.0.0
+servers:
+- url: https://api.gitar.ai/v1
+tags:
+- name: Organizations
+paths:
+  /external/organizations:
+    post:
+      tags:
+      - Organizations
+      summary: Create a partner organization
+      description: 'Requires the organizations:create scope (or an administrator token) and the CreateOrganizations entitlement. Creates an Auth0 organization and emails the recipient an invitation to join it as admin. Parenting records attribution and grants no access.
+
+
+        Each call creates a new organization, including retries after a partial failure. A partner may create a limited number of organizations per rolling 24 hours (500 by default) and receives 429 beyond that. An optional API offer is recorded at signup and the trial starts on the first code connection. Retired or repriced offers fall back to the standard trial at activation.'
+      operationId: createOrganization
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrganizationRequest'
+        required: true
+      responses:
+        '201':
+          description: Organization created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateOrganizationResponse'
+        '400':
+          description: Invalid email or unrecognized API offer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '401':
+          description: Invalid or missing bearer token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '403':
+          description: Missing scope or entitlement, or inactive parent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '404':
+          description: Parent organization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '429':
+          description: Daily organization creation limit reached
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '500':
+          description: Provisioning failed, possibly after partial creation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+      security:
+      - bearerAuth: []
+components:
+  schemas:
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+    CreateOrganizationResponse:
+      type: object
+      required:
+      - organization_id
+      - organization_name
+      - organization_slug
+      - parent_organization_id
+      properties:
+        organization_id:
+          type: string
+        organization_name:
+          type: string
+        organization_slug:
+          type: string
+        parent_organization_id:
+          type: string
+    CreateOrganizationRequest:
+      type: object
+      required:
+      - email
+      properties:
+        email:
+          type: string
+        offer_code:
+          type:
+          - string
+          - 'null'
+          description: Partner API offer code. Omit for the standard trial.
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer

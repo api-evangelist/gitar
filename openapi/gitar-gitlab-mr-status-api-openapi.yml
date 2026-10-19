@@ -19,7 +19,10 @@ paths:
       tags:
       - GitLab MR Status
       summary: Get Gitar's blocking status for a GitLab MR
-      description: 'Returns the current Gitar blocking status for a GitLab merge request. Intended for use in CI pipelines: fail the job when `blocked == "yes"` and mark it required for merge.'
+      description: 'Returns the current Gitar blocking status for a GitLab merge request. Intended for use in CI pipelines: fail the job when `blocked == "yes"` and mark it required for merge.
+
+
+        Organizations with a single connected GitLab instance can omit `host`. On a multi-instance organization, pass `host` to say which instance the project id belongs to — GitLab project ids are only unique within one instance.'
       operationId: getGitlabMrStatus
       parameters:
       - name: project_id
@@ -38,6 +41,12 @@ paths:
           type: integer
           format: int64
           minimum: 0
+      - name: host
+        in: query
+        description: GitLab instance the project lives on (e.g. https://gitlab.com). Required on multi-instance organizations when the project id is ambiguous.
+        required: false
+        schema:
+          type: string
       responses:
         '200':
           description: MR blocking status returned successfully
@@ -69,25 +78,16 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ResponseFailure'
+        '409':
+          description: The organization has several GitLab instances and `host` did not identify one
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
       security:
       - bearerAuth: []
 components:
   schemas:
-    MrStatusResponse:
-      type: object
-      description: Pipeline-friendly MR status returned to SoFi's CI job.
-      required:
-      - blocked
-      properties:
-        blocked:
-          $ref: '#/components/schemas/MrBlockedStatus'
-          description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
-    MrBlockedStatus:
-      type: string
-      enum:
-      - 'yes'
-      - 'no'
-      - pending
     ResponseFailure:
       type: object
       required:
@@ -99,6 +99,21 @@ components:
           - 'null'
         message:
           type: string
+    MrBlockedStatus:
+      type: string
+      enum:
+      - 'yes'
+      - 'no'
+      - pending
+    MrStatusResponse:
+      type: object
+      description: Pipeline-friendly MR status returned to SoFi's CI job.
+      required:
+      - blocked
+      properties:
+        blocked:
+          $ref: '#/components/schemas/MrBlockedStatus'
+          description: '`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass.'
   securitySchemes:
     bearerAuth:
       type: http

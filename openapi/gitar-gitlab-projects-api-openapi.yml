@@ -19,7 +19,10 @@ paths:
       tags:
       - GitLab Projects
       summary: Onboard a GitLab project
-      description: Add a GitLab project to Gitar and configure webhooks for code review. This endpoint is idempotent — calling it for an already-connected project returns success with status `already_connected`.
+      description: 'Add a GitLab project to Gitar and configure webhooks for code review. This endpoint is idempotent — calling it for an already-connected project returns success with status `already_connected`.
+
+
+        **Selecting a GitLab instance.** Organizations with a single connected GitLab instance can omit `host`. Once an organization connects more than one instance, `host` becomes required: without it Gitar cannot tell which instance a project id or path refers to, and the request is rejected with `409 Conflict` listing the connected instances.'
       operationId: onboardGitlabProject
       requestBody:
         content:
@@ -35,7 +38,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/OnboardGitlabProjectApiResponse'
         '400':
-          description: Bad request (missing project_id and project_path)
+          description: Bad request (missing project_id and project_path, or no GitLab integration for this organization)
           content:
             application/json:
               schema:
@@ -53,7 +56,13 @@ paths:
               schema:
                 $ref: '#/components/schemas/ResponseFailure'
         '404':
-          description: GitLab integration not found for this organization
+          description: Organization not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseFailure'
+        '409':
+          description: The organization has several GitLab instances and `host` did not identify one, or the project id is already connected from a different instance
           content:
             application/json:
               schema:
@@ -62,45 +71,6 @@ paths:
       - bearerAuth: []
 components:
   schemas:
-    ResponseFailure:
-      type: object
-      required:
-      - message
-      properties:
-        error_code:
-          type:
-          - string
-          - 'null'
-        message:
-          type: string
-    OnboardGitlabProjectApiRequest:
-      type: object
-      description: 'Request to onboard a single GitLab project via the external API.
-
-
-        One of `project_id` or `project_path` must be provided.
-
-        If both are present, `project_id` takes precedence.'
-      properties:
-        project_id:
-          type:
-          - integer
-          - 'null'
-          format: int64
-          description: GitLab project numeric ID (e.g. 12345)
-          minimum: 0
-        project_path:
-          type:
-          - string
-          - 'null'
-          description: GitLab project path (e.g. "group/subgroup/project")
-    OnboardProjectStatus:
-      type: string
-      description: Status of an individual project onboard operation.
-      enum:
-      - onboarded
-      - already_connected
-      - failed
     OnboardGitlabProjectApiResponse:
       type: object
       description: Response from onboarding a single GitLab project via the external API.
@@ -128,6 +98,61 @@ components:
           type: boolean
         webhook_configured:
           type: boolean
+    ResponseFailure:
+      type: object
+      required:
+      - message
+      properties:
+        error_code:
+          type:
+          - string
+          - 'null'
+        message:
+          type: string
+    OnboardProjectStatus:
+      type: string
+      description: Status of an individual project onboard operation.
+      enum:
+      - onboarded
+      - already_connected
+      - failed
+    OnboardGitlabProjectApiRequest:
+      type: object
+      description: 'Request to onboard a single GitLab project via the external API.
+
+
+        One of `project_id` or `project_path` must be provided.
+
+        If both are present, `project_id` takes precedence.'
+      properties:
+        host:
+          type:
+          - string
+          - 'null'
+          description: 'GitLab instance the project lives on (e.g. "https://gitlab.com").
+
+
+            Optional for organizations with a single connected GitLab instance, and
+
+            required once there is more than one — without it the project would be
+
+            looked up on an arbitrary instance. A request that omits or misnames the
+
+            host on a multi-instance organization is rejected with `409 Conflict`
+
+            listing the connected instances.'
+        project_id:
+          type:
+          - integer
+          - 'null'
+          format: int64
+          description: GitLab project numeric ID (e.g. 12345)
+          minimum: 0
+        project_path:
+          type:
+          - string
+          - 'null'
+          description: GitLab project path (e.g. "group/subgroup/project")
   securitySchemes:
     bearerAuth:
       type: http

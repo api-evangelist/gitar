@@ -50,6 +50,48 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    GithubHealth:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+    CodeHostingHealth:
+      type: object
+      properties:
+        atlassian:confluence:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/AtlassianHealth'
+        atlassian:jira:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/AtlassianHealth'
+        azure_devops:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/AzureDevOpsHealth'
+        bitbucket:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/BitbucketHealth'
+        bitbucket_data_center:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/BitbucketDataCenterHealth'
+        github:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/GithubHealth'
+        gitlab:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/GitlabHealth'
+        slack:
+          oneOf:
+          - type: 'null'
+          - $ref: '#/components/schemas/SlackHealth'
     SlackHealth:
       type: object
       required:
@@ -64,13 +106,6 @@ components:
           type: string
         team_id:
           type: string
-    InstallationHealthResponse:
-      type: object
-      required:
-      - code_hosting
-      properties:
-        code_hosting:
-          $ref: '#/components/schemas/CodeHostingHealth'
     GitlabHealth:
       type: object
       required:
@@ -86,32 +121,6 @@ components:
           - 'null'
         status:
           type: string
-    CodeHostingHealth:
-      type: object
-      properties:
-        github:
-          oneOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/GithubHealth'
-        gitlab:
-          oneOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/GitlabHealth'
-        jira:
-          oneOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/JiraHealth'
-        slack:
-          oneOf:
-          - type: 'null'
-          - $ref: '#/components/schemas/SlackHealth'
-    GithubHealth:
-      type: object
-      required:
-      - status
-      properties:
-        status:
-          type: string
     ResponseFailure:
       type: object
       required:
@@ -123,19 +132,71 @@ components:
           - 'null'
         message:
           type: string
-    JiraHealth:
+    BitbucketDataCenterHealth:
       type: object
       required:
       - status
       properties:
-        failure_reason:
-          type:
-          - string
-          - 'null'
+        status:
+          type: string
+    InstallationHealthResponse:
+      type: object
+      required:
+      - code_hosting
+      properties:
+        code_hosting:
+          $ref: '#/components/schemas/CodeHostingHealth'
+    AtlassianHealth:
+      type: object
+      description: 'One Atlassian product (Jira or Confluence) installed via the Forge app.
+
+
+        Installs are per site per product, so an org can have several. `status` aggregates the sites
+
+        (`error` if any site is not connected), matching the `ok`/`error` vocabulary the other entries
+
+        use, and `sites` carries the per-site detail.'
+      required:
+      - status
+      - sites
+      properties:
+        sites:
+          type: array
+          items:
+            $ref: '#/components/schemas/AtlassianSiteHealth'
+        status:
+          type: string
+    AtlassianSiteHealth:
+      type: object
+      required:
+      - cloud_id
+      - status
+      properties:
+        cloud_id:
+          type: string
         host:
           type:
           - string
           - 'null'
+        status:
+          type: string
+          description: 'Per-site state, `ok` or `error`, same vocabulary as every other `status` in this response.
+
+            The query only returns live installs bound to the org, so a removed or unbound site drops
+
+            out of `sites` rather than showing up here.'
+    AzureDevOpsHealth:
+      type: object
+      required:
+      - status
+      properties:
+        status:
+          type: string
+    BitbucketHealth:
+      type: object
+      required:
+      - status
+      properties:
         status:
           type: string
   securitySchemes:

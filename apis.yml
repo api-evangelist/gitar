@@ -107,6 +107,16 @@ apis:
     url: openapi/gitar-installation-health-api-openapi.yml
   - type: APIReference
     url: https://docs.gitar.ai/api-reference/overview
+- aid: gitar:gitar-organizations-api
+  name: Gitar Organizations API
+  description: The Organizations API from Gitar — 1 operation(s) for organizations.
+  humanURL: https://docs.gitar.ai/api-reference/overview
+  baseURL: https://api.gitar.ai/v1
+  tags:
+  - Organizations
+  properties:
+  - type: OpenAPI
+    url: openapi/gitar-organizations-api-openapi.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com

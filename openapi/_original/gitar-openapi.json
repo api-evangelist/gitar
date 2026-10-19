@@ -1,0 +1,681 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Gitar External API",
+    "description": "API for managing your Gitar installation and integrations",
+    "contact": {
+      "name": "Gitar",
+      "url": "https://gitar.ai",
+      "email": "noreply@gitar.ai"
+    },
+    "license": {
+      "name": ""
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.gitar.ai/v1"
+    }
+  ],
+  "paths": {
+    "/external/gitlab/mr_status": {
+      "get": {
+        "tags": ["GitLab MR Status"],
+        "summary": "Get Gitar's blocking status for a GitLab MR",
+        "description": "Returns the current Gitar blocking status for a GitLab merge request. Intended for use in CI pipelines: fail the job when `blocked == \"yes\"` and mark it required for merge.\n\nOrganizations with a single connected GitLab instance can omit `host`. On a multi-instance organization, pass `host` to say which instance the project id belongs to — GitLab project ids are only unique within one instance.",
+        "operationId": "getGitlabMrStatus",
+        "parameters": [
+          {
+            "name": "project_id",
+            "in": "query",
+            "description": "GitLab project ID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "mr_iid",
+            "in": "query",
+            "description": "GitLab merge request IID",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int64",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "host",
+            "in": "query",
+            "description": "GitLab instance the project lives on (e.g. https://gitlab.com). Required on multi-instance organizations when the project id is ambiguous.",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "MR blocking status returned successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MrStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid query parameters",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Project not connected to this org",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The organization has several GitLab instances and `host` did not identify one",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/external/gitlab/projects": {
+      "post": {
+        "tags": ["GitLab Projects"],
+        "summary": "Onboard a GitLab project",
+        "description": "Add a GitLab project to Gitar and configure webhooks for code review. This endpoint is idempotent — calling it for an already-connected project returns success with status `already_connected`.\n\n**Selecting a GitLab instance.** Organizations with a single connected GitLab instance can omit `host`. Once an organization connects more than one instance, `host` becomes required: without it Gitar cannot tell which instance a project id or path refers to, and the request is rejected with `409 Conflict` listing the connected instances.",
+        "operationId": "onboardGitlabProject",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OnboardGitlabProjectApiRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Project onboarded successfully or already connected",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OnboardGitlabProjectApiResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad request (missing project_id and project_path, or no GitLab integration for this organization)",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "The organization has several GitLab instances and `host` did not identify one, or the project id is already connected from a different instance",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/external/organizations": {
+      "post": {
+        "tags": ["Organizations"],
+        "summary": "Create a partner organization",
+        "description": "Requires the organizations:create scope (or an administrator token) and the CreateOrganizations entitlement. Creates an Auth0 organization and emails the recipient an invitation to join it as admin. Parenting records attribution and grants no access.\n\nEach call creates a new organization, including retries after a partial failure. A partner may create a limited number of organizations per rolling 24 hours (500 by default) and receives 429 beyond that. An optional API offer is recorded at signup and the trial starts on the first code connection. Retired or repriced offers fall back to the standard trial at activation.",
+        "operationId": "createOrganization",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrganizationRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Organization created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateOrganizationResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid email or unrecognized API offer",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid or missing bearer token",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Missing scope or entitlement, or inactive parent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Parent organization not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Daily organization creation limit reached",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Provisioning failed, possibly after partial creation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
+    "/installation/health": {
+      "get": {
+        "tags": ["Installation Health"],
+        "operationId": "getInstallationHealth",
+        "responses": {
+          "200": {
+            "description": "Installation health status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InstallationHealthResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient scopes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No code hosting installation found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseFailure"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AtlassianHealth": {
+        "type": "object",
+        "description": "One Atlassian product (Jira or Confluence) installed via the Forge app.\n\nInstalls are per site per product, so an org can have several. `status` aggregates the sites\n(`error` if any site is not connected), matching the `ok`/`error` vocabulary the other entries\nuse, and `sites` carries the per-site detail.",
+        "required": ["status", "sites"],
+        "properties": {
+          "sites": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/AtlassianSiteHealth"
+            }
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "AtlassianSiteHealth": {
+        "type": "object",
+        "required": ["cloud_id", "status"],
+        "properties": {
+          "cloud_id": {
+            "type": "string"
+          },
+          "host": {
+            "type": ["string", "null"]
+          },
+          "status": {
+            "type": "string",
+            "description": "Per-site state, `ok` or `error`, same vocabulary as every other `status` in this response.\nThe query only returns live installs bound to the org, so a removed or unbound site drops\nout of `sites` rather than showing up here."
+          }
+        }
+      },
+      "AzureDevOpsHealth": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "BitbucketDataCenterHealth": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "BitbucketHealth": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "CodeHostingHealth": {
+        "type": "object",
+        "properties": {
+          "atlassian:confluence": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AtlassianHealth"
+              }
+            ]
+          },
+          "atlassian:jira": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AtlassianHealth"
+              }
+            ]
+          },
+          "azure_devops": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/AzureDevOpsHealth"
+              }
+            ]
+          },
+          "bitbucket": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/BitbucketHealth"
+              }
+            ]
+          },
+          "bitbucket_data_center": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/BitbucketDataCenterHealth"
+              }
+            ]
+          },
+          "github": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GithubHealth"
+              }
+            ]
+          },
+          "gitlab": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/GitlabHealth"
+              }
+            ]
+          },
+          "slack": {
+            "oneOf": [
+              {
+                "type": "null"
+              },
+              {
+                "$ref": "#/components/schemas/SlackHealth"
+              }
+            ]
+          }
+        }
+      },
+      "CreateOrganizationRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string"
+          },
+          "offer_code": {
+            "type": ["string", "null"],
+            "description": "Partner API offer code. Omit for the standard trial."
+          }
+        }
+      },
+      "CreateOrganizationResponse": {
+        "type": "object",
+        "required": [
+          "organization_id",
+          "organization_name",
+          "organization_slug",
+          "parent_organization_id"
+        ],
+        "properties": {
+          "organization_id": {
+            "type": "string"
+          },
+          "organization_name": {
+            "type": "string"
+          },
+          "organization_slug": {
+            "type": "string"
+          },
+          "parent_organization_id": {
+            "type": "string"
+          }
+        }
+      },
+      "GithubHealth": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "GitlabHealth": {
+        "type": "object",
+        "required": ["status"],
+        "properties": {
+          "group": {
+            "type": ["string", "null"]
+          },
+          "host": {
+            "type": ["string", "null"]
+          },
+          "status": {
+            "type": "string"
+          }
+        }
+      },
+      "InstallationHealthResponse": {
+        "type": "object",
+        "required": ["code_hosting"],
+        "properties": {
+          "code_hosting": {
+            "$ref": "#/components/schemas/CodeHostingHealth"
+          }
+        }
+      },
+      "MrBlockedStatus": {
+        "type": "string",
+        "enum": ["yes", "no", "pending"]
+      },
+      "MrStatusResponse": {
+        "type": "object",
+        "description": "Pipeline-friendly MR status returned to SoFi's CI job.",
+        "required": ["blocked"],
+        "properties": {
+          "blocked": {
+            "$ref": "#/components/schemas/MrBlockedStatus",
+            "description": "`yes` → CI job should fail; `no` → approved or human bypass, pass; `pending` → no review yet, pass."
+          }
+        }
+      },
+      "OnboardGitlabProjectApiRequest": {
+        "type": "object",
+        "description": "Request to onboard a single GitLab project via the external API.\n\nOne of `project_id` or `project_path` must be provided.\nIf both are present, `project_id` takes precedence.",
+        "properties": {
+          "host": {
+            "type": ["string", "null"],
+            "description": "GitLab instance the project lives on (e.g. \"https://gitlab.com\").\n\nOptional for organizations with a single connected GitLab instance, and\nrequired once there is more than one — without it the project would be\nlooked up on an arbitrary instance. A request that omits or misnames the\nhost on a multi-instance organization is rejected with `409 Conflict`\nlisting the connected instances."
+          },
+          "project_id": {
+            "type": ["integer", "null"],
+            "format": "int64",
+            "description": "GitLab project numeric ID (e.g. 12345)",
+            "minimum": 0
+          },
+          "project_path": {
+            "type": ["string", "null"],
+            "description": "GitLab project path (e.g. \"group/subgroup/project\")"
+          }
+        }
+      },
+      "OnboardGitlabProjectApiResponse": {
+        "type": "object",
+        "description": "Response from onboarding a single GitLab project via the external API.",
+        "required": ["success", "project_path", "status", "webhook_configured"],
+        "properties": {
+          "error": {
+            "type": ["string", "null"]
+          },
+          "project_id": {
+            "type": ["integer", "null"],
+            "format": "int64",
+            "minimum": 0
+          },
+          "project_path": {
+            "type": "string"
+          },
+          "status": {
+            "$ref": "#/components/schemas/OnboardProjectStatus"
+          },
+          "success": {
+            "type": "boolean"
+          },
+          "webhook_configured": {
+            "type": "boolean"
+          }
+        }
+      },
+      "OnboardProjectStatus": {
+        "type": "string",
+        "description": "Status of an individual project onboard operation.",
+        "enum": ["onboarded", "already_connected", "failed"]
+      },
+      "ResponseFailure": {
+        "type": "object",
+        "required": ["message"],
+        "properties": {
+          "error_code": {
+            "type": ["string", "null"]
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "SlackHealth": {
+        "type": "object",
+        "required": ["status", "team_id"],
+        "properties": {
+          "failure_reason": {
+            "type": ["string", "null"]
+          },
+          "status": {
+            "type": "string"
+          },
+          "team_id": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}
