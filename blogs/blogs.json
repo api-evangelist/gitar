@@ -5,8 +5,15 @@
       "source": "https://gitar.ai/blog",
       "feed_url": "https://gitar.ai/blog/rss.xml",
       "title": "",
-      "saved": 2,
+      "saved": 0,
       "method": "discovered"
+    },
+    {
+      "source": "https://gitar.ai/blog/rss.xml",
+      "feed_url": "https://gitar.ai/blog/rss.xml",
+      "title": "",
+      "saved": 0,
+      "method": "feed"
     },
     {
       "source": "https://docs.gitar.ai/quickstart",
@@ -16,6 +23,6 @@
       "method": "none"
     }
   ],
-  "post_count": 2,
-  "fetched": "2026-10-10T13:15:00Z"
+  "post_count": 20,
+  "fetched": "2026-10-17T14:53:57Z"
 }
