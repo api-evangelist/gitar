@@ -64,6 +64,133 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Gitar is a company surfaced as a portfolio company of sierra-ventures and added to the API Evangelist network as a stub for enrichment. Sector: developer-tools. This profile is a lead awaiting the enrichment pipeline.
+Gitar is an AI code review platform that goes beyond commenting on pull and merge requests — it automatically fixes broken builds, failing tests, linting errors, and code-review findings, and validates every change against your CI pipeline before it is pushed. It works directly in the GitHub and GitLab PR interface, analyzes CI failures, deduplicates flaky tests, and runs natural-language repository rules from a .gitar/rules directory. Built by engineers from Uber's development stack and acquired by Sonar (SonarQube), Gitar is used by teams including SoFi, DeepL, and Altruist. It exposes a Bearer-token External API (api.gitar.ai/v1) on the Enterprise plan for installation health checks and GitLab project onboarding, and integrates with Buildkite, CircleCI, Bitrise, Jira, Linear, and Slack.
 
-Backed by: sierra-ventures — https://gitar.ai/
+**Areas:** Company · Developer Tools · Code Review · CI/CD · Code Quality · Artificial Intelligence · Developer Productivity · Automation
+
+## Gitar on APIs.io
+
+Everything profiled for Gitar is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/gitar/](https://apis.io/providers/gitar/)** — or go straight to one of the APIs or properties below.
+
+### APIs (3)
+
+- [Gitar GitLab MR Status API](https://apis.io/apis/gitar/gitar-gitlab-mr-status-api/) — The GitLab MR Status API from Gitar — 1 operation(s) for gitlab mr status.
+- [Gitar GitLab Projects API](https://apis.io/apis/gitar/gitar-gitlab-projects-api/) — The GitLab Projects API from Gitar — 1 operation(s) for gitlab projects.
+- [Gitar Installation Health API](https://apis.io/apis/gitar/gitar-installation-health-api/) — The Installation Health API from Gitar — 1 operation(s) for installation health.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [gitar](https://apis.io/servers/gitar/gitar/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Gitar Agentic Access](https://apis.io/agentic-access/gitar/gitar-agentic-access/)
+
+#### Collections (3)
+
+Postman and Open Collection request collections.
+
+- [Gitar External GitLab MR Status API](https://apis.io/collections/gitar/open-gitar-gitlab-mr-status-api/)
+- [Gitar External GitLab MR Status GitLab Projects API](https://apis.io/collections/gitar/open-gitar-gitlab-projects-api/)
+- [Gitar External GitLab MR Status Installation Health API](https://apis.io/collections/gitar/open-gitar-installation-health-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Gitar Openapi Overlay](https://apis.io/overlays/gitar/gitar-openapi-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Gitar Authentication](https://apis.io/security/gitar/gitar-authentication/)
+- [Gitar Domain Security](https://apis.io/security/gitar/gitar-domain-security/)
+- [Gitar Trust Center](https://apis.io/security/gitar/gitar-trust-center/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Gitar Plans Pricing](https://apis.io/plans/gitar/gitar-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://gitar.ai/)
+- [Documentation](https://docs.gitar.ai/)
+- [Getting started](https://docs.gitar.ai/quickstart)
+- [API reference](https://docs.gitar.ai/api-reference/overview)
+- [Pricing](https://gitar.ai/pricing)
+- [Sign up](https://app.gitar.ai/sign-up)
+- [Support](https://go.gitar.ai/community)
+- [Blog](https://gitar.ai/blog)
+- [Trust centre](https://trust.gitar.ai/)
+- [Terms of service](https://gitar.ai/terms-of-service)
+- [Privacy policy](https://gitar.ai/privacy-policy)
+- [GitHub](https://github.com/gitarcode)
+- [Status](https://status.gitar.ai)
+
+## API Evangelist rating
+
+**Kin Score 56.0** — strong · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 51.0 |
+| Contract governance | 18.2 |
+| Operational transparency | 18.4 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 92.1 |
+
+**Agent readiness 23.9** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | — |
+| Rate Limit Signal | — |
+| Event Surface Described | — |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 27.3** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/gitar/](https://apis.io/providers/gitar/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Gitar: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/gitar/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
